@@ -73,7 +73,7 @@
     </style>
 </head>
 <body>
-    <h1> 아루 Chatbot 연습 </h1>
+    <h1> Chatbot Test </h1>
     <div class = 'chat-background'>
         {% for message in messages %}
             <div class="message-container {% if message['role'] == 'user' %}user-message{% else %}assistant-message{% endif %}">
@@ -84,9 +84,14 @@
         {% endfor %}
     </div>
     <form class="message-form" action="/" method="post">
-        <input class="message-input" type="text" name="message" autocomplete="off"/>
+        <textarea class="message-input" type="text" name="message" autocomplete="off"></textarea>
         <button class="send-button" type="submit">Send</button>
     </form>
+
+    <script>
+        const chatBackground = document.querySelector('.chat-background');
+        chatBackground.scrollTop = chatBackground.scrollHeight;
+    </script>
 </body>
 </html>
 

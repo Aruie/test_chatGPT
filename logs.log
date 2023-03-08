@@ -1,1 +1,2 @@
 2023-03-03 14:39:06,806 - INFO - User st1ring created ##########################
+2023-03-08 16:30:55,784 - INFO - error_code=context_length_exceeded error_message="This model's maximum context length is 4096 tokens. However, your messages resulted in 5578 tokens. Please reduce the length of the messages." error_param=messages error_type=invalid_request_error message='OpenAI API error received' stream_error=False

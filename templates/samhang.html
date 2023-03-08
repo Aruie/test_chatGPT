@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>N행시 변환 결과</title>
+</head>
+<body>
+    <h1>삼행시</h1>
+    {% for message in messages %}
+        <h2>{{ message[0] }}</h2>
+        <pre>{{ message[1] }}</pre>
+    {% endfor %}
+    
+</body>
+</html>

@@ -18,17 +18,14 @@ logging.basicConfig(
 )
 
 
-
 app = FastAPI()
 app.include_router(user_router.router)
 templates = Jinja2Templates(directory="templates")
 api = OpenaiChat()
 
-
 @app.get("/", response_class=HTMLResponse)
 async def chatroom(request: Request):
     return templates.TemplateResponse("chatroom.html", {"request": request, 'messages': api.history})
-
 
 @app.post("/")
 async def send_message(request: Request):
@@ -42,3 +39,6 @@ async def reset_message(request: Request):
     api.clear_message()
     return RedirectResponse(url="/")
 
+@app.get('/samhang')
+async def samhang(request: Request):
+    return templates.TemplateResponse("samhang.html", {"request": request})
