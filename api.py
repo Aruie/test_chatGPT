@@ -3,6 +3,12 @@ import openai
 import yaml
 
 
+
+
+
+
+
+
 class OpenaiChat():
     def __init__(self, age = 20, gender = 1, hobby = '그림 그리기', prompt = None):
 
@@ -49,12 +55,29 @@ class OpenaiChat():
         ''' 
         Clear the history of the conversation
         '''
-        # self.history = [{'role':'assistant','content': '1'}]
         self.history = []
 
-# %%
 
-    #%%
+    def chat_with_voice(self, file_name):
+        text = self._voice_to_text(file_name)
+        output = self.send_message(text)
+        return output
+
+    def _voice_to_text(self, file_name):
+        with open(file_name, 'rb') as f:
+            output = openai.Audio.transcribe('whisper-1', f)
+
+        return output['text']
+
+
+
+# 임시
+def speech_to_text(filename):
+    output = OpenaiChat()._voice_to_text(filename)
+    return output
+
+
+# %%
 
 
 
@@ -80,3 +103,11 @@ if __name__ == '__main__':
     output = OpenaiChat().send_message(text)
     print(output)
     # %%
+
+    model = OpenaiChat()
+
+    # %%
+    aa = model.chat_with_voice('goguma.mp3')
+    # %%
+
+

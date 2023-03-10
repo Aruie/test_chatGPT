@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>음성 인식</title>
+        <script>
+            var ws = null;
+            var recording = false;
+            var chunks = [];
+
+            function toggleRecording() {
+                if (recording) {
+                    stopRecording();
+                } else {
+                    startRecording();
+                }
+            }
+
+            function startRecording() {
+                if (recording) {
+                    return;
+                }
+                chunks = [];
+                recording = true;
+                ws = new WebSocket("ws://{{ host }}/ws");
+
+                ws.onopen = function() {
+                    console.log("WebSocket connection established.");
+                };
+
+                ws.onmessage = function(event) {
+                    console.log("WebSocket message received:", event.data);
+                    document.getElementById("result").innerHTML = event.data;
+                };
+
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function(stream) {
+                        var mediaRecorder = new MediaRecorder(stream);
+                        mediaRecorder.start();
+
+                        mediaRecorder.addEventListener("dataavailable", function(event) {
+                            if (event.data.size > 0) {
+                                chunks.push(event.data);
+                            }
+                        });
+
+                        mediaRecorder.addEventListener("stop", function() {
+                            ws.close();
+                            recording = false;
+                            var blob = new Blob(chunks, { type: "audio/wav" });
+                            var url = URL.createObjectURL(blob);
+                            var audio = new Audio(url);
+                            audio.play();
+                        });
+                    });
+            }
+
+            function stopRecording() {
+                if (!recording) {
+                    return;
+                }
+                recording = false;
+                ws.close();
+            }
+        </script>
+    </head>
+    <body>
+        <h1>음성 인식</h1>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+        <button onclick="toggleRecording()">{{ '녹음 시작' if not recording else '녹음 종료' }}</button>
+        <div id="result"></div>
+    </body>
+</html>

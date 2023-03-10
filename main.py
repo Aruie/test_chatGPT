@@ -42,3 +42,9 @@ async def reset_message(request: Request):
 @app.get('/samhang')
 async def samhang(request: Request):
     return templates.TemplateResponse("samhang.html", {"request": request})
+
+
+
+@app.get('/listen', response_class=HTMLResponse)
+async def listen(request: Request):
+    return templates.TemplateResponse("listen.html", {'request': request})

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Record audio and save as WAV file</title>
+</head>
+<body>
+    <button id="record">Record</button>
+    <a href="#" onclick="saveRecording()">Download recording</a>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let isRecording = false;
+        let recordingUrl = null;
+
+        const recordBtn = document.getElementById('record');
+
+        recordBtn.addEventListener('click', function() {
+            console.log('record button clicked');
+            if (isRecording) {
+                axios.post('/record_audio/stop')
+                .then(function(response) {
+                    isRecording = false;
+                    recordBtn.textContent = 'Record';
+                    recordingUrl = response.data.file_path;
+                    console.log('recording saved to ' + recordingUrl);
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+            } else {
+                axios.post('/record_audio/start')
+                .then(function(response) {
+                    isRecording = true;
+                    recordBtn.textContent = 'Stop';
+                    recordingUrl = null;
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+            }
+        });
+
+        function saveRecording() {
+            if (recordingUrl) {
+                const link = document.createElement('a');
+                link.href = recordingUrl;
+                link.download = 'recording.wav';
+                document.body.appendChild(link);
+                link.click();
+            }
+        }
+    </script>
+</body>
+</html>
